@@ -3,6 +3,8 @@ import fortress from "../../packages/core/dist/index.js";
 
 const app = express();
 
+app.use(fortress.logger());
+
 app.use(fortress.headers());
 
 app.use(

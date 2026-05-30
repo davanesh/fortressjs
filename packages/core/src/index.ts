@@ -1,13 +1,15 @@
 import {
   headers,
   requestLimit,
-  rateLimit
+  rateLimit,
+  logger
 } from "./middleware";
 
 const fortress = {
   headers,
   requestLimit,
-  rateLimit
+  rateLimit,
+  logger
 };
 
 export default fortress;
@@ -15,5 +17,6 @@ export default fortress;
 export {
   headers,
   requestLimit,
-  rateLimit
+  rateLimit,
+  logger
 };
