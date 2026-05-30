@@ -8,6 +8,11 @@ import { ThreatDetectorOptions, ThreatSeverity, ThreatType } from "../types/thre
 // Deduplication map to avoid spamming the same threat type for an IP
 const lastThreatTimes = new Map<string, number>();
 
+/** Reset internal deduplication state. Useful for testing. */
+export const resetThreatDetector = (): void => {
+  lastThreatTimes.clear();
+};
+
 export const threatDetector = (options: ThreatDetectorOptions = {}) => {
   const windowMs = options.windowMs || 60 * 1000; // default 60s
   const highActivityThreshold = options.highActivityThreshold || 20;

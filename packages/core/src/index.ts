@@ -4,6 +4,7 @@ import {
   rateLimit,
   logger,
   threatDetector,
+  resetThreatDetector,
   fortress as unifiedFortress,
   UnifiedFortressOptions
 } from "./middleware";
@@ -32,6 +33,7 @@ export {
   rateLimit,
   logger,
   threatDetector,
+  resetThreatDetector,
   eventStore,
   threatStore,
   UnifiedFortressOptions
