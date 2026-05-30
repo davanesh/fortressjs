@@ -5,6 +5,19 @@ const app = express();
 
 app.use(fortress.headers());
 
+app.use(
+  fortress.requestLimit({
+    maxBodySize: "1mb"
+  })
+);
+
+app.use(
+  fortress.rateLimit({
+    windowMs: 60000,
+    maxRequests: 1
+  })
+);
+
 app.get("/", (_, res) => {
   res.json({
     message: "FortressJS Running"

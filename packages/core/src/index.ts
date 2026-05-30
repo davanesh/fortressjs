@@ -1,8 +1,19 @@
-import { headers } from "./middleware";
+import {
+  headers,
+  requestLimit,
+  rateLimit
+} from "./middleware";
 
 const fortress = {
-  headers
+  headers,
+  requestLimit,
+  rateLimit
 };
 
 export default fortress;
-export { headers };
+
+export {
+  headers,
+  requestLimit,
+  rateLimit
+};
