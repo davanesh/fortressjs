@@ -4,10 +4,17 @@
   "workspaces": [
     "packages/*"
   ],
+  "packageManager": "npm@11.6.2",
   "scripts": {
-    "build": "turbo build"
+    "build": "turbo build",
+    "test": "npm run test --workspace=@fortressjs/core"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/supertest": "^7.2.0",
+    "jest": "^30.4.2",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.11",
     "turbo": "^2.0.0",
     "typescript": "^5.0.0"
   }

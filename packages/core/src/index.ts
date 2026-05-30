@@ -3,16 +3,26 @@ import {
   requestLimit,
   rateLimit,
   logger,
-  threatDetector
+  threatDetector,
+  fortress as unifiedFortress,
+  UnifiedFortressOptions
 } from "./middleware";
 
-const fortress = {
+import { eventStore as rawEventStore, threatStore as rawThreatStore } from "./store";
+
+// Cast to any to bypass declaration emit issues with private class fields
+const eventStore = rawEventStore as any;
+const threatStore = rawThreatStore as any;
+
+const fortress = Object.assign(unifiedFortress, {
   headers,
   requestLimit,
   rateLimit,
   logger,
-  threatDetector
-};
+  threatDetector,
+  eventStore,
+  threatStore
+});
 
 export default fortress;
 
@@ -21,5 +31,9 @@ export {
   requestLimit,
   rateLimit,
   logger,
-  threatDetector
+  threatDetector,
+  eventStore,
+  threatStore,
+  UnifiedFortressOptions
 };
+export * from "./types";

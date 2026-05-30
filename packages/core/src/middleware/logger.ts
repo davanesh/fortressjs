@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { eventStore } from "../store";
 
 export const logger = () => {
   return (
@@ -9,15 +10,27 @@ export const logger = () => {
     const start = Date.now();
 
     res.on("finish", () => {
-      const duration =
-        Date.now() - start;
+      const duration = Date.now() - start;
+
+      const event = {
+        timestamp: new Date().toISOString(),
+        ip:
+          req.ip ||
+          req.socket.remoteAddress ||
+          "unknown",
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: res.statusCode
+      };
+
+      eventStore.add(event);
 
       console.log(
-        `[${new Date().toISOString()}] ` +
-        `${req.method} ` +
-        `${req.originalUrl} ` +
-        `${res.statusCode} ` +
-        `${req.ip} ` +
+        `[${event.timestamp}] ` +
+        `${event.method} ` +
+        `${event.path} ` +
+        `${event.statusCode} ` +
+        `${event.ip} ` +
         `${duration}ms`
       );
     });
