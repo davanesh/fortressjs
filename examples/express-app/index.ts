@@ -14,6 +14,10 @@ app.use(
 );
 
 app.use(
+  fortress.threatDetector()
+);
+
+app.use(
   fortress.rateLimit({
     windowMs: 60000,
     maxRequests: 1
