@@ -1,19 +1,9 @@
 {
-  "name": "core",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "@fortressjs/core",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/node": "^25.9.1",
-    "typescript": "^5.9.3"
+    "build": "tsc"
   }
-  
 }

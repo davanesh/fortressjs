@@ -1,5 +1,5 @@
 import express from "express";
-import fortress from "../../packages/core/src";
+import fortress from "../../packages/core/dist/index.js";
 
 const app = express();
 
