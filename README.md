@@ -1,5 +1,9 @@
 # FortressJS
 
+![npm](https://img.shields.io/npm/v/%40fortressjs%2Fcore)
+![license](https://img.shields.io/npm/l/%40fortressjs%2Fcore)
+![build](https://github.com/davanesh/fortressjs/actions/workflows/ci.yml/badge.svg)
+
 A powerful, event-driven security platform for Node.js APIs. Designed to be developer-friendly, performant, and secure by default.
 
 ## Features
