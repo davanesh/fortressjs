@@ -6,11 +6,15 @@ type RequestRecord = {
   startTime: number;
 };
 
-const requests = new Map<string, RequestRecord>();
-
 export const rateLimit = (
   options: RateLimitOptions
 ) => {
+  // Isolated per middleware instance
+  const requests = new Map<
+    string,
+    RequestRecord
+  >();
+
   return (
     req: Request,
     res: Response,
@@ -25,6 +29,7 @@ export const rateLimit = (
 
     const record = requests.get(ip);
 
+    // First request from IP
     if (!record) {
       requests.set(ip, {
         count: 1,
@@ -34,6 +39,7 @@ export const rateLimit = (
       return next();
     }
 
+    // Window expired -> reset counter
     if (
       now - record.startTime >
       options.windowMs
@@ -46,8 +52,10 @@ export const rateLimit = (
       return next();
     }
 
+    // Increment count inside active window
     record.count++;
 
+    // Block if limit exceeded
     if (
       record.count >
       options.maxRequests
@@ -58,6 +66,6 @@ export const rateLimit = (
       });
     }
 
-    next();
+    return next();
   };
 };
