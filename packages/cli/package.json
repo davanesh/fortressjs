@@ -1,7 +1,7 @@
 {
   "name": "@fortressjs/cli",
   "version": "0.1.0",
-  "description": "Security auditing CLI for FortressJS and Express applications",
+  "description": "Security audit CLI for Express applications. Detect missing security headers, rate limits, request validation, and threat protection.",
   "license": "MIT",
   "author": "Davanesh Saminathan",
   "homepage": "https://github.com/davanesh/fortressjs",
@@ -26,19 +26,20 @@
     "node": ">=18"
   },
   "bin": {
-    "fortress": "./bin/fortress.js"
+    "fortress": "bin/fortress.js"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "bin"
+    "bin",
+    "README.md"
   ],
   "scripts": {
     "build": "tsc"
   },
   "dependencies": {
-    "@fortressjs/core": "0.1.0"
+    "@fortressjs/core": "^0.1.0"
   },
   "devDependencies": {
     "typescript": "^5.0.0"

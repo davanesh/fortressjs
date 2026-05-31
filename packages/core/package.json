@@ -1,7 +1,7 @@
 {
   "name": "@fortressjs/core",
   "version": "0.1.0",
-  "description": "Security middleware and threat detection platform for Express APIs",
+  "description": "Express security middleware with headers, rate limiting, threat detection, request validation, and security auditing.",
   "license": "MIT",
   "author": "Davanesh Saminathan",
   "homepage": "https://github.com/davanesh/fortressjs",
