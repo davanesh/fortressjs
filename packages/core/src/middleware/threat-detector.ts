@@ -103,7 +103,7 @@ export const threatDetector = (options: ThreatDetectorOptions = {}) => {
     details: string
   ) {
     const now = Date.now();
-    const dedupKey = `${ip}:${type}`;
+    const dedupKey = `${ip}:${type}:${details}`;
     const lastTriggered = lastThreatTimes.get(dedupKey) || 0;
 
     // Deduplicate same threat within 5 seconds to prevent event flooding

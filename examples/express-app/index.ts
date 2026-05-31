@@ -3,24 +3,36 @@ import fortress from "../../packages/core/dist/index.js";
 
 const app = express();
 
-app.use(fortress.logger());
+import { threatStore } from "../../packages/core/dist/index.js";
 
-app.use(fortress.headers());
+// Optional: Subscribe to real-time threat events
+threatStore.subscribe((threat) => {
+  if (threat.severity === "CRITICAL" || threat.severity === "HIGH") {
+    console.log(`\n🚨 [ALERT] ${threat.severity} Threat Detected!`);
+    console.log(`Type: ${threat.type}`);
+    console.log(`IP: ${threat.ip}`);
+    console.log(`Details: ${threat.details}\n`);
+  }
+});
 
+// Use unified Fortress middleware
 app.use(
-  fortress.requestLimit({
-    maxBodySize: "1mb"
-  })
-);
-
-app.use(
-  fortress.threatDetector()
-);
-
-app.use(
-  fortress.rateLimit({
-    windowMs: 60000,
-    maxRequests: 1
+  fortress({
+    enableLogger: true,
+    enableHeaders: true,
+    requestLimit: {
+      maxBodySize: "1mb"
+    },
+    rateLimit: {
+      windowMs: 60000,
+      maxRequests: 100
+    },
+    threatDetection: {
+      windowMs: 60000,
+      highActivityThreshold: 20,
+      bruteForceThreshold: 3,
+      payloadAbuseThreshold: 3
+    }
   })
 );
 
