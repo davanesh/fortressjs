@@ -1,6 +1,30 @@
 {
   "name": "@fortressjs/core",
   "version": "0.1.0",
+  "description": "Security middleware and threat detection platform for Express APIs",
+  "license": "MIT",
+  "author": "Davanesh Saminathan",
+  "homepage": "https://github.com/davanesh/fortressjs",
+  "bugs": {
+    "url": "https://github.com/davanesh/fortressjs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davanesh/fortressjs.git"
+  },
+  "keywords": [
+    "security",
+    "express",
+    "middleware",
+    "rate-limit",
+    "headers",
+    "api-security",
+    "nodejs",
+    "cybersecurity"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -9,6 +33,9 @@
   "scripts": {
     "build": "tsc",
     "test": "jest"
+  },
+  "peerDependencies": {
+    "express": "^5.0.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

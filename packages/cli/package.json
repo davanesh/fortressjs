@@ -1,11 +1,39 @@
 {
   "name": "@fortressjs/cli",
   "version": "0.1.0",
+  "description": "Security auditing CLI for FortressJS and Express applications",
+  "license": "MIT",
+  "author": "Davanesh Saminathan",
+  "homepage": "https://github.com/davanesh/fortressjs",
+  "bugs": {
+    "url": "https://github.com/davanesh/fortressjs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davanesh/fortressjs.git"
+  },
+  "keywords": [
+    "security",
+    "cli",
+    "audit",
+    "express",
+    "nodejs",
+    "middleware",
+    "api-security",
+    "fortressjs"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "bin": {
     "fortress": "./bin/fortress.js"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "bin"
+  ],
   "scripts": {
     "build": "tsc"
   },
