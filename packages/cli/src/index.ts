@@ -13,6 +13,27 @@ const C = {
   cyan: "\x1b[36m"
 };
 
+function getTargetFiles(targetPath: string): string[] {
+  if (!fs.existsSync(targetPath)) {
+    throw new Error(`Path does not exist: ${targetPath}`);
+  }
+
+  const stat = fs.statSync(targetPath);
+
+  if (stat.isFile()) {
+    if (
+      targetPath.endsWith(".ts") ||
+      targetPath.endsWith(".js")
+    ) {
+      return [targetPath];
+    }
+
+    return [];
+  }
+
+  return getFilesRecursively(targetPath);
+}
+
 function getFilesRecursively(dir: string, fileList: string[] = []): string[] {
   if (!fs.existsSync(dir)) return fileList;
 
@@ -46,19 +67,40 @@ function getFilesRecursively(dir: string, fileList: string[] = []): string[] {
   return fileList;
 }
 
-export function runAudit(): void {
+export function runAudit(
+  targetPath?: string
+): void {
   console.log(`\n${C.bold}${C.cyan}🛡️  FortressJS Security Audit CLI${C.reset}`);
   console.log(`${C.dim}=========================================${C.reset}\n`);
 
-  const cwd = process.cwd();
-  const files = getFilesRecursively(cwd);
+  const target = path.resolve(
+    targetPath || process.cwd()
+  );
+  
+  let files: string[];
+
+  try {
+    files = getTargetFiles(target);
+  } catch (error) {
+    console.error(
+      `${C.red}${(error as Error).message}${C.reset}`
+    );
+    process.exit(1);
+  }
 
   if (files.length === 0) {
-    console.log(`${C.yellow}No JavaScript or TypeScript files found to scan in: ${cwd}${C.reset}`);
+    console.log(`${C.yellow}No JavaScript or TypeScript files found to scan in: ${target}${C.reset}`);
     return;
   }
 
-  console.log(`${C.dim}Scanning ${files.length} file(s)...${C.reset}`);
+  console.log(
+    `${C.dim}Target: ${target}${C.reset}`
+  );
+
+  console.log(
+    `${C.dim}Scanning ${files.length} file(s)...${C.reset}`
+  );
+
   const scanner = new RegexScanner();
 
   // Aggregate results across all files in the project
@@ -151,9 +193,15 @@ export function runAudit(): void {
 
 // CLI entry point
 const args = process.argv.slice(2);
+
 if (args[0] === "audit") {
-  runAudit();
+  const target = args[1];
+  runAudit(target);
 } else {
   console.log(`\n${C.bold}FortressJS CLI${C.reset}`);
-  console.log(`${C.dim}Usage: npx fortress audit${C.reset}\n`);
+  console.log(`${C.dim}Usage:${C.reset}`);
+  console.log(`  fortress audit`);
+  console.log(`  fortress audit .`);
+  console.log(`  fortress audit ./src`);
+  console.log(`  fortress audit ./src/app.ts\n`);
 }
