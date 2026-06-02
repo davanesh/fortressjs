@@ -1,6 +1,6 @@
 {
   "name": "@fortressjs/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Security audit CLI for Express applications. Detect missing security headers, rate limits, request validation, and threat protection.",
   "license": "MIT",
   "author": "Davanesh Saminathan",
