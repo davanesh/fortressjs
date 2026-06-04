@@ -2,6 +2,12 @@ import fs from "fs";
 import path from "path";
 import { RegexScanner, ScanResult } from "./scanner";
 
+interface AuditResult {
+  score: number;
+  missing: string[];
+  recommendations: string[];
+}
+
 // ANSI Terminal Colors
 const C = {
   reset: "\x1b[0m",
