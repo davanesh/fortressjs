@@ -16,4 +16,17 @@ describe("ASTScanner", () => {
 
     expect(result).toBeDefined();
   });
+  it("should detect fortress imports", () => {
+  const scanner =
+    new ASTScanner();
+
+  const result =
+    scanner.scan(`
+      import fortress
+      from "@fortressjs/core";
+    `);
+    expect(
+      result.hasCSP
+    ).toBe(true);
+  });
 });

@@ -33,6 +33,19 @@ export class ASTScanner
     const visit = (
       node: ts.Node
     ) => {
+      if (
+        ts.isImportDeclaration(node)
+        ) {
+          const moduleName =
+            node.moduleSpecifier.getText(sourceFile);
+          if (
+            moduleName.includes(
+              "@fortressjs/core"
+            )
+          ) {
+            result.hasCSP = true;
+          }
+        }
       ts.forEachChild(
         node,
         visit
