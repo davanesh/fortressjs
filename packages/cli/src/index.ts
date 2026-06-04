@@ -3,6 +3,7 @@ import path from "path";
 import { RegexScanner, ScanResult } from "./scanner";
 
 interface AuditResult {
+  target: string;
   score: number;
   missing: string[];
   recommendations: string[];
@@ -74,11 +75,9 @@ function getFilesRecursively(dir: string, fileList: string[] = []): string[] {
 }
 
 export function runAudit(
-  targetPath?: string
+  targetPath?: string,
+  jsonOutput = false
 ): void {
-  console.log(`\n${C.bold}${C.cyan}🛡️  FortressJS Security Audit CLI${C.reset}`);
-  console.log(`${C.dim}=========================================${C.reset}\n`);
-
   const target = path.resolve(
     targetPath || process.cwd()
   );
@@ -94,18 +93,32 @@ export function runAudit(
     process.exit(1);
   }
 
-  if (files.length === 0) {
-    console.log(`${C.yellow}No JavaScript or TypeScript files found to scan in: ${target}${C.reset}`);
+if (files.length === 0) {
+  if (jsonOutput) {
+    console.log(
+      JSON.stringify(
+        {
+          target,
+          score: 0,
+          missing: [],
+          recommendations: [],
+          message: "No JavaScript or TypeScript files found"
+        },
+        null,
+        2
+      )
+    );
     return;
   }
-
-  console.log(
-    `${C.dim}Target: ${target}${C.reset}`
-  );
-
-  console.log(
-    `${C.dim}Scanning ${files.length} file(s)...${C.reset}`
-  );
+  console.log(`${C.yellow}No JavaScript or TypeScript files found to scan in: ${target}${C.reset}`);
+  return;
+}
+  if(!jsonOutput) {
+    console.log(`\n${C.bold}${C.cyan}🛡️  FortressJS Security Audit CLI${C.reset}`);
+    console.log(`${C.dim}=========================================${C.reset}\n`);
+    console.log(`${C.dim}Target: ${target}${C.reset}`);
+    console.log(`${C.dim}Scanning ${files.length} file(s)...${C.reset}\n`);
+  }
 
   const scanner = new RegexScanner();
 
@@ -173,7 +186,25 @@ export function runAudit(
 
   score = Math.max(0, score);
 
-  // Pick color based on score
+  const auditResult: AuditResult = {
+    target,
+    score,
+    missing,
+    recommendations
+  };
+
+  if (jsonOutput) {
+    console.log(
+      JSON.stringify(
+        auditResult,
+        null,
+        2
+      )
+    );
+    return;
+  }
+
+// Pick color based on score
   let scoreColor = C.red;
   if (score >= 90) scoreColor = C.green;
   else if (score >= 70) scoreColor = C.yellow;
@@ -186,14 +217,10 @@ export function runAudit(
   }
 
   console.log(`${C.bold}${C.red}Missing Protections:${C.reset}`);
-  for (const item of missing) {
-    console.log(`  ${C.red}✗${C.reset} ${item}`);
-  }
+  for (const item of missing) { console.log(`  ${C.red}✗${C.reset} ${item}`); }
 
   console.log(`\n${C.bold}${C.yellow}Recommendations:${C.reset}`);
-  for (const rec of recommendations) {
-    console.log(`  ${C.cyan}•${C.reset} ${rec}`);
-  }
+  for (const rec of recommendations) { console.log(`  ${C.cyan}•${C.reset} ${rec}`); }
   console.log("");
 }
 
@@ -201,8 +228,13 @@ export function runAudit(
 const args = process.argv.slice(2);
 
 if (args[0] === "audit") {
-  const target = args[1];
-  runAudit(target);
+  const jsonOutput = args.includes("--json");
+  const target = args.find(
+    (arg) =>
+      arg !== "audit" &&
+      arg !== "--json"
+  );
+  runAudit(target, jsonOutput);
 } else {
   console.log(`\n${C.bold}FortressJS CLI${C.reset}`);
   console.log(`${C.dim}Usage:${C.reset}`);
