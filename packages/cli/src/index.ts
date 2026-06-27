@@ -2,6 +2,8 @@ import fs from "fs";
 import path from "path";
 import { RegexScanner, ScanResult } from "./scanner";
 
+import { ASTScanner } from "./ast-scanner";
+
 interface AuditResult {
   target: string;
   score: number;
@@ -120,7 +122,7 @@ if (files.length === 0) {
     console.log(`${C.dim}Scanning ${files.length} file(s)...${C.reset}\n`);
   }
 
-  const scanner = new RegexScanner();
+  const scanner = new ASTScanner();
 
   // Aggregate results across all files in the project
   const aggregated: ScanResult = {
