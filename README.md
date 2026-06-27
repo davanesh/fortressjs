@@ -1,6 +1,7 @@
 # FortressJS
 
 ![npm](https://img.shields.io/npm/v/%40fortressjs%2Fcore)
+![npm-cli](https://img.shields.io/npm/v/%40fortressjs%2Fcli)
 ![license](https://img.shields.io/npm/l/%40fortressjs%2Fcore)
 ![build](https://github.com/davanesh/fortressjs/actions/workflows/ci.yml/badge.svg)
 
@@ -157,6 +158,39 @@ Audit your Express application for missing security controls.
 npx @fortressjs/cli audit ./src/app.ts
 ```
 
+Generate JSON output:
+
+```bash
+npx @fortressjs/cli audit . --json
+```
+
+Generate a Markdown security report:
+
+```bash
+npx @fortressjs/cli audit . --report
+```
+
+Creates:
+
+```text
+fortress-report.md
+```
+
+Features:
+
+- AST-based middleware detection
+- Security scoring
+- Missing protection analysis
+- Actionable recommendations
+- JSON export
+- Markdown report generation
+
+Audit your Express application for missing security controls.
+
+```bash
+npx @fortressjs/cli audit ./src/app.ts
+```
+
 Example output:
 
 ```text
@@ -191,7 +225,7 @@ Detailed documentation is available in the `/docs` directory:
 Current Release:
 
 ```text
-v0.1.0
+v0.1.4
 ```
 
 Included:
