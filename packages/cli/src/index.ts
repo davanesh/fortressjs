@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { RegexScanner, ScanResult } from "./scanner";
+import { generateMarkdownReport } from "./report-generator";
 
 import { ASTScanner } from "./ast-scanner";
 
@@ -78,7 +79,8 @@ function getFilesRecursively(dir: string, fileList: string[] = []): string[] {
 
 export function runAudit(
   targetPath?: string,
-  jsonOutput = false
+  jsonOutput = false,
+  reportOutput = false
 ): void {
   const target = path.resolve(
     targetPath || process.cwd()
@@ -115,7 +117,7 @@ if (files.length === 0) {
   console.log(`${C.yellow}No JavaScript or TypeScript files found to scan in: ${target}${C.reset}`);
   return;
 }
-  if(!jsonOutput) {
+  if(!jsonOutput && !reportOutput) {
     console.log(`\n${C.bold}${C.cyan}🛡️  FortressJS Security Audit CLI${C.reset}`);
     console.log(`${C.dim}=========================================${C.reset}\n`);
     console.log(`${C.dim}Target: ${target}${C.reset}`);
@@ -194,6 +196,13 @@ if (files.length === 0) {
     missing,
     recommendations
   };
+  
+  if (reportOutput) {
+    const markdown = generateMarkdownReport(auditResult);
+    fs.writeFileSync("fortress-report.md",markdown);
+    console.log("Report generated: fortress-report.md");
+    return;
+  }
 
   if (jsonOutput) {
     console.log(
@@ -231,17 +240,21 @@ const args = process.argv.slice(2);
 
 if (args[0] === "audit") {
   const jsonOutput = args.includes("--json");
+  const reportOutput = args.includes("--report");
   const target = args.find(
     (arg) =>
       arg !== "audit" &&
-      arg !== "--json"
+      arg !== "--json" &&
+      arg !== "--report"
   );
-  runAudit(target, jsonOutput);
+  runAudit(target, jsonOutput, reportOutput);
 } else {
   console.log(`\n${C.bold}FortressJS CLI${C.reset}`);
   console.log(`${C.dim}Usage:${C.reset}`);
   console.log(`  fortress audit`);
   console.log(`  fortress audit .`);
   console.log(`  fortress audit ./src`);
-  console.log(`  fortress audit ./src/app.ts\n`);
+  console.log(`  fortress audit ./src/app.ts`);
+  console.log(`  fortress audit --json`);
+  console.log(`  fortress audit --report\n`);
 }
