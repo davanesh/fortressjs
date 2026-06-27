@@ -2,7 +2,7 @@
 
 Security auditing CLI for Express applications.
 
-Analyze Express projects and identify missing security protections such as rate limiting, request validation, security headers, and threat detection.
+Analyze Express projects and identify missing security protections such as security headers, rate limiting, request size limits, logging, threat detection, and HTTPS enforcement.
 
 ## Installation
 
@@ -26,6 +26,32 @@ Audit the current project:
 fortress audit
 ```
 
+Audit a specific directory:
+
+```bash
+fortress audit .
+fortress audit ./src
+fortress audit ./src/app.ts
+```
+
+Generate JSON output:
+
+```bash
+fortress audit . --json
+```
+
+Generate a Markdown security report:
+
+```bash
+fortress audit . --report
+```
+
+Creates:
+
+```text
+fortress-report.md
+```
+
 ## Example Output
 
 ```text
@@ -42,7 +68,26 @@ Recommendations:
 • Configure strict transport security
 ```
 
-## What It Checks
+## Example Report
+
+```md
+# FortressJS Security Report
+
+Generated: 2026-06-27
+
+## Security Score
+
+70/100
+
+## Missing Protections
+
+- Threat Intelligence Engine
+- HTTPS Enforcement / HSTS
+```
+
+## Security Checks
+
+FortressJS currently audits for:
 
 * Content Security Policy (CSP)
 * Security Headers
@@ -52,14 +97,14 @@ Recommendations:
 * Threat Detection
 * HTTPS / HSTS Configuration
 
-## Roadmap
+## Features
 
-Planned improvements:
-
-* File and directory path support
 * AST-based code analysis
-* More advanced security checks
-* Framework-specific auditing
+* Security scoring
+* Actionable recommendations
+* JSON export
+* Markdown report generation
+* Project-wide scanning
 
 ## Repository
 
