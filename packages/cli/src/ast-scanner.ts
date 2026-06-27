@@ -1,18 +1,9 @@
 import ts from "typescript";
-import {
-  AuditScanner,
-  ScanResult
-} from "./scanner";
+import { AuditScanner, ScanResult } from "./scanner";
 
-export class ASTScanner
-  implements AuditScanner
-{
+export class ASTScanner implements AuditScanner {
   name = "ASTScanner";
-
-  scan(
-    fileContent: string
-  ): ScanResult {
-
+  scan(fileContent: string): ScanResult {
     const sourceFile =
       ts.createSourceFile(
         "temp.ts",
@@ -20,7 +11,6 @@ export class ASTScanner
         ts.ScriptTarget.Latest,
         true
       );
-
     const result: ScanResult = {
       hasCSP: false,
       hasRateLimiting: false,
@@ -29,31 +19,49 @@ export class ASTScanner
       hasThreatDetection: false,
       hasHTTPS: false
     };
+    const visit = (node: ts.Node) => {
+      if (ts.isImportDeclaration(node)) {
+        const moduleName = node.moduleSpecifier.getText(sourceFile);
+        if (moduleName.includes("@fortressjs/core")) {
+          result.hasCSP = true;
+        }
+      }
+    if (ts.isCallExpression(node)) {
+      const expression = node.expression;
 
-    const visit = (
-      node: ts.Node
-    ) => {
-      if (
-        ts.isImportDeclaration(node)
+      if (ts.isPropertyAccessExpression(expression)) {
+        if (
+          expression.expression.getText(sourceFile) ===
+          "fortress"
         ) {
-          const moduleName =
-            node.moduleSpecifier.getText(sourceFile);
-          if (
-            moduleName.includes(
-              "@fortressjs/core"
-            )
+          switch (
+            expression.name.getText(sourceFile)
           ) {
-            result.hasCSP = true;
+            case "headers":
+              result.hasCSP = true;
+              break;
+
+            case "rateLimit":
+              result.hasRateLimiting = true;
+              break;
+
+            case "requestLimit":
+              result.hasRequestSizeLimiting = true;
+              break;
+
+              case "logger":
+                result.hasLogger = true;
+                break;
+
+              case "threatDetector":
+                result.hasThreatDetection = true;
+                break;
+            }
           }
         }
-      ts.forEachChild(
-        node,
-        visit
-      );
+      } ts.forEachChild(node, visit);
     };
-
     visit(sourceFile);
-
     return result;
   }
 }
