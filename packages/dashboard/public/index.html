@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>FortressJS Dashboard</title>
+
+  <link
+    rel="stylesheet"
+    href="./styles.css"
+  />
+</head>
+
+<body>
+
+  <header class="topbar">
+    <div>
+      <h1>FortressJS</h1>
+      <p>Security Dashboard</p>
+    </div>
+
+    <div class="status">
+      <span class="status-dot"></span>
+      Monitoring
+    </div>
+  </header>
+
+  <main>
+
+    <section class="metrics">
+
+      <div class="metric-card">
+        <span>Requests</span>
+        <strong id="requests">0</strong>
+      </div>
+
+      <div class="metric-card">
+        <span>Threats</span>
+        <strong id="threats">0</strong>
+      </div>
+
+      <div class="metric-card">
+        <span>Critical</span>
+        <strong id="critical">0</strong>
+      </div>
+
+      <div class="metric-card">
+        <span>Unique IPs</span>
+        <strong id="ips">0</strong>
+      </div>
+
+    </section>
+
+    <section class="grid">
+
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Threat Severity</h2>
+        </div>
+
+        <div id="severity">
+          Loading...
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Threat Types</h2>
+        </div>
+
+        <div id="threat-types">
+          Loading...
+        </div>
+      </div>
+
+    </section>
+
+    <section class="panel">
+
+      <div class="panel-header">
+        <h2>Live Threat Feed</h2>
+
+        <span id="connection">
+          Connecting...
+        </span>
+      </div>
+
+      <div id="threat-feed">
+        <p class="empty">
+          No threats detected.
+        </p>
+      </div>
+
+    </section>
+
+    <section class="panel">
+
+      <div class="panel-header">
+        <h2>Recent Requests</h2>
+      </div>
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Method</th>
+              <th>Path</th>
+              <th>Status</th>
+              <th>IP</th>
+            </tr>
+          </thead>
+
+          <tbody id="events">
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="./app.js"></script>
+
+</body>
+
+</html>

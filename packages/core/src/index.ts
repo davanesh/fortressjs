@@ -9,7 +9,10 @@ import {
   UnifiedFortressOptions
 } from "./middleware";
 
-import { eventStore as rawEventStore, threatStore as rawThreatStore } from "./store";
+import {
+  eventStore as rawEventStore,
+  threatStore as rawThreatStore
+} from "./store";
 
 // Cast to any to bypass declaration emit issues with private class fields
 const eventStore = rawEventStore as any;
@@ -38,4 +41,14 @@ export {
   threatStore,
   UnifiedFortressOptions
 };
+
+export {
+  observability
+} from "./observability";
+
+export type {
+  ObservabilityAPI,
+  ObservabilityMetrics
+} from "./observability";
+
 export * from "./types";
