@@ -8,14 +8,39 @@ import path from "path";
 
 import {
   observability,
-  ThreatType
+  ThreatType,
+  ThreatEvent,
+  ObservabilityMetrics
 } from "@fortressjs/core";
 
 export interface DashboardOptions {
   enabled?: boolean;
 }
 
-function getThreatTypeCounts() {
+interface OverviewResponse
+  extends ObservabilityMetrics {
+  threatTypes: Record<ThreatType, number>;
+  retentionMs: number;
+  timestamp: string;
+}
+
+interface ThreatsResponse {
+  threats: ThreatEvent[];
+}
+
+interface EventsResponse {
+  events: ReturnType<
+    typeof observability.getEvents
+  >;
+}
+
+interface ThreatStreamInitialEvent {
+  threats: ThreatEvent[];
+}
+
+function getThreatTypeCounts():
+  Record<ThreatType, number> {
+
   const threats = observability.getThreats();
 
   const counts: Record<ThreatType, number> = {
@@ -55,12 +80,14 @@ export function dashboard(
   (_req: Request, res: Response) => {
     const metrics = observability.getMetrics();
 
-    res.json({
+    const response: OverviewResponse = {
       ...metrics,
       threatTypes: getThreatTypeCounts(),
       retentionMs: observability.getRetention(),
       timestamp: new Date().toISOString()
-    });
+    };
+
+    res.json(response);
   }
 );
 
@@ -77,10 +104,8 @@ export function dashboard(
             new Date(b.timestamp).getTime() -
             new Date(a.timestamp).getTime()
         );
-
-      res.json({
-        threats
-      });
+      const response: ThreatsResponse = { threats };
+      res.json(response);
     }
   );
 
@@ -97,10 +122,8 @@ export function dashboard(
             new Date(b.timestamp).getTime() -
             new Date(a.timestamp).getTime()
         );
-
-      res.json({
-        events
-      });
+      const response: EventsResponse = { events };
+      res.json(response);
     }
   );
 
@@ -131,24 +154,18 @@ export function dashboard(
         event: string,
         data: unknown
       ) => {
-        res.write(
-          `event: ${event}\n`
-        );
-
+        res.write(`event: ${event}\n`);
         res.write(
           `data: ${JSON.stringify(data)}\n\n`
         );
       };
+      const currentThreats = observability.getThreats();
 
-      const currentThreats =
-        observability.getThreats();
+      const initialEvent: ThreatStreamInitialEvent = {
+        threats: currentThreats
+      };
 
-      sendEvent(
-        "initial",
-        {
-          threats: currentThreats
-        }
-      );
+      sendEvent("initial", initialEvent);
 
       const unsubscribe =
         observability.subscribeThreats(
@@ -177,9 +194,7 @@ export function dashboard(
   /*
    * Serve dashboard frontend.
    */
-  router.use(
-    express.static(publicDir)
-  );
+  router.use(express.static(publicDir));
 
   /*
    * Dashboard entry point.

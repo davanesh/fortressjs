@@ -4,7 +4,7 @@ import {
   ThreatListener
 } from "../store/threat-store";
 
-import {
+import type {
   SecurityEvent
 } from "../store/event-store";
 
