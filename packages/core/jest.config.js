@@ -1,10 +1,24 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
-  testMatch: ["**/src/**/*.spec.ts"],
+  transform: {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: "tsconfig.test.json"
+      }
+    ]
+  },
+  testMatch: [
+    "**/src/**/*.spec.ts",
+    "**/src/**/*.test.ts"
+  ],
   collectCoverage: true,
   coverageDirectory: "coverage",
-  coverageReporters: ["text", "lcov"],
+  coverageReporters: [
+    "text",
+    "lcov"
+  ],
   coverageThreshold: {
     global: {
       branches: 80,

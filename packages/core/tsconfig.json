@@ -4,10 +4,12 @@
     "rootDir": "src",
     "outDir": "dist",
     "declaration": true,
+    "types": ["node", "jest"]
   },
-  "include": ["src"],
+  "include": [
+    "src"
+  ],
   "exclude": [
-    "**/*.spec.ts",
-    "**/*.test.ts"
+    "src/**/*.test.ts"
   ]
 }
